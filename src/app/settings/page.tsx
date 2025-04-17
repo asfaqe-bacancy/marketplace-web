@@ -31,7 +31,7 @@ export default function SettingsPage() {
               </div>
             </div>
 
-            <div className={styles.divider}>
+            {/* <div className={styles.divider}>
               <h2 className={styles.sectionHeading}>Account Actions</h2>
               <div className={styles.actionContainer}>
                 <Button
@@ -53,7 +53,7 @@ export default function SettingsPage() {
                   Logout
                 </Button>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </AppLayout>
