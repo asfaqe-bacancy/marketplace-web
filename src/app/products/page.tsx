@@ -32,7 +32,8 @@ export default function ProductsPage() {
       try {
         setLoading(true);
         const response = await api.get('/products');
-        setProducts(response.data);
+        setProducts(response.data.data);
+        console.log('Products fetched:', response.data);
       } catch (err) {
         console.error('Error fetching products:', err);
         setError('Failed to load products. Please try again later.');
@@ -82,7 +83,7 @@ export default function ProductsPage() {
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {products.length> 0 && products.map((product) => (
+            {products.map((product) => (
               <Link key={product._id} href={`/products/${product._id}`}>
                 <div className="bg-white rounded-lg shadow overflow-hidden hover:shadow-md transition-shadow duration-300">
                   <div className="relative h-48 w-full bg-gray-200">
@@ -104,12 +105,12 @@ export default function ProductsPage() {
                     <p className="text-[#1c219e] font-bold mb-2">${product.price.toFixed(2)}</p>
                     <p className="text-gray-500 text-sm mb-3 line-clamp-2">{product.description}</p>
                     <div className="flex justify-between items-center">
-                      <span className="text-xs text-gray-500">
+                      {/* <span className="text-xs text-gray-500">
                         By {product.seller.name}
-                      </span>
-                      <span className="text-xs text-gray-500">
+                      </span> */}
+                      {/* <span className="text-xs text-gray-500">
                         {new Date(product.createdAt).toLocaleDateString()}
-                      </span>
+                      </span> */}
                     </div>
                   </div>
                 </div>

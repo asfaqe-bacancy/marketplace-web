@@ -49,7 +49,7 @@ const Navbar: React.FC = () => {
               >
                 Products
               </Link>
-              {user && (
+              {/* {user && (
                 <Link
                   href="/dashboard"
                   className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
@@ -60,7 +60,7 @@ const Navbar: React.FC = () => {
                 >
                   Dashboard
                 </Link>
-              )}
+              )} */}
             </div>
           </div>
           <div className="hidden sm:ml-6 sm:flex sm:items-center">

@@ -5,7 +5,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import AppLayout from '@/components/AppLayout';
 import Button from '@/components/ui/Button';
 import ProtectedRoute from '@/components/ProtectedRoute';
-import { styles } from '../styles';
+import { styles } from './styles';
 
 export default function SettingsPage() {
   const { user, logout } = useAuth();
@@ -31,19 +31,9 @@ export default function SettingsPage() {
               </div>
             </div>
 
-            {/* <div className={styles.divider}>
+            <div className={styles.divider}>
               <h2 className={styles.sectionHeading}>Account Actions</h2>
               <div className={styles.actionContainer}>
-                <Button
-                  variant="outline"
-                  className={styles.button.default}
-                  onClick={() => {
-                    // Implement password change functionality
-                    alert('Password change functionality would go here');
-                  }}
-                >
-                  Change Password
-                </Button>
                 
                 <Button
                   variant="outline"
@@ -53,7 +43,7 @@ export default function SettingsPage() {
                   Logout
                 </Button>
               </div>
-            </div> */}
+            </div>
           </div>
         </div>
       </AppLayout>
