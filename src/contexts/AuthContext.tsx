@@ -3,6 +3,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { authService } from '@/lib/auth';
 import type { LoginData, RegisterData } from '@/lib/auth';
+import apiService from '@/lib/api';
 
 interface AuthContextType {
   user: any | null;
@@ -53,9 +54,27 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const logout = () => {
-    authService.logout();
-    setUser(null);
+  const logout = async () => {
+    try {
+      // Get device token from localStorage
+      const deviceToken = localStorage.getItem('device_token') || 'web-app-token';
+      
+      // Call the logout API endpoint with the device token
+      await apiService.post('/auth/logout', { 
+        deviceToken 
+      });
+      
+      console.log('Logout API called successfully');
+    } catch (error) {
+      console.error('Logout API call failed:', error);
+      // Continue with local logout even if API call fails
+    } finally {
+      // Clear local storage and state
+      localStorage.removeItem('auth_token');
+      localStorage.removeItem('user');
+      localStorage.removeItem('device_token');
+      setUser(null);
+    }
   };
 
   return (

@@ -27,11 +27,18 @@ interface Product {
 export default function ProductDetailPage() {
   const { id } = useParams();
   const router = useRouter();
-  const { user } = useAuth();
+  const { user, isAuthenticated, isLoading: authLoading } = useAuth();
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [deleteLoading, setDeleteLoading] = useState(false);
+
+  // Redirect to login if not authenticated
+  useEffect(() => {
+    if (!authLoading && !isAuthenticated) {
+      router.push('/auth/login?redirect=' + encodeURIComponent(`/products/${id}`));
+    }
+  }, [authLoading, isAuthenticated, router, id]);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -47,10 +54,10 @@ export default function ProductDetailPage() {
       }
     };
 
-    if (id) {
+    if (id && isAuthenticated) {
       fetchProduct();
     }
-  }, [id]);
+  }, [id, isAuthenticated]);
 
   const handleDelete = async () => {
     if (!window.confirm('Are you sure you want to delete this product?')) {
@@ -69,6 +76,19 @@ export default function ProductDetailPage() {
   };
 
   const isOwner = user && product && user?._id === product?.seller?._id;
+
+  // If still checking authentication or not authenticated, show loading
+  if (authLoading || !isAuthenticated) {
+    return (
+      <AppLayout>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="flex justify-center items-center h-64">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#1c219e]"></div>
+          </div>
+        </div>
+      </AppLayout>
+    );
+  }
 
   if (loading) {
     return (
@@ -161,8 +181,6 @@ export default function ProductDetailPage() {
               <div className="text-sm text-gray-500 mb-6">
                 Listed on {new Date(product?.createdAt).toLocaleDateString()}
               </div>
-              
-              // In the JSX where the delete button is rendered:
                
                 <div className="flex space-x-4">
                   <Link href={`/products/${product?._id}/edit`} className="flex-1">

@@ -9,6 +9,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { requestNotificationPermission } from '@/lib/firebase';
+import { useSearchParams } from 'next/navigation';
 
 const LoginSchema = Yup.object().shape({
   email: Yup.string().email('Invalid email').required('Email is required'),
@@ -18,6 +19,8 @@ const LoginSchema = Yup.object().shape({
 export default function LoginPage() {
   const { login } = useAuth();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectPath = searchParams.get('redirect') || '/';
   const [error, setError] = useState('');
   const [deviceToken, setDeviceToken] = useState<string | null>(null);
 
@@ -41,13 +44,27 @@ export default function LoginPage() {
   const handleSubmit = async (values: { email: string; password: string }, { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }) => {
     try {
       setError('');
+      console.log('Attempting login with:', values.email);
+      
+      // Store device token in localStorage for later use in logout
+      if (deviceToken) {
+        localStorage.setItem('device_token', deviceToken);
+      }
+      
       await login({
         email: values.email,
         password: values.password,
         deviceToken: deviceToken || 'web-app-token'
       });
-      router.push('/');
+      
+      // Add a small delay before redirecting
+      setTimeout(() => {
+        console.log('Login successful, redirecting to:', redirectPath || '/');
+        router.push(redirectPath || '/');
+      }, 100);
+      
     } catch (err: any) {
+      console.error('Login error:', err);
       setError(err.response?.data?.message || 'Login failed. Please try again.');
     } finally {
       setSubmitting(false);

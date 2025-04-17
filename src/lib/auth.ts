@@ -55,8 +55,21 @@ export const authService = {
   },
 
   getUser() {
-    const userData = localStorage.getItem(USER_KEY);
-    return userData ? JSON.parse(userData) : null;
+    if (typeof window === 'undefined') {
+      return null;
+    }
+    
+    const userData = localStorage.getItem('user');
+    if (!userData) return null;
+    
+    try {
+      return JSON.parse(userData);
+    } catch (error) {
+      console.error('Error parsing user data from localStorage:', error);
+      // If there's an error parsing, clear the invalid data
+      localStorage.removeItem('user');
+      return null;
+    }
   },
 
   isAuthenticated() {
