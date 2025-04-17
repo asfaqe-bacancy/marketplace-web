@@ -74,7 +74,7 @@ export default function RegisterPage() {
           </p>
         </div>
         <div className="text-white/60 text-sm">
-          © 2023 Marketplace. All rights reserved.
+          © 2025 Marketplace. All rights reserved.
         </div>
       </div>
 

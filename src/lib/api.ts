@@ -42,16 +42,22 @@ const apiService = {
   delete: api.delete,
 
   // Form data methods
-  async uploadProductWithImage(formData: FormData) {
+  async  uploadProductWithImage(formData: FormData) {
     // Token is automatically added by the interceptor
     console.log('Uploading product with image...');
-    const response = await api.post('/products/create-with-image', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-        'Authorization': `Bearer ${localStorage.getItem('auth_token')}`,
-      },
-    });
-    return response.data;
+    try {
+      // Use the correct endpoint based on your API
+      const response = await api.post('/products/create-with-image', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      console.log('Product upload response:', response);
+      return response.data;
+    } catch (error) {
+      console.error('Error in uploadProductWithImage:', error);
+      throw error;
+    }
   },
 
   async updateProductWithImage(productId: string, formData: FormData) {

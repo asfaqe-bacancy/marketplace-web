@@ -36,11 +36,8 @@ export default function CreateProductPage() {
         formData.append('image', fileInputRef.current.files[0]);
       }
 
-      await api.post('/products', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
+      // Use the uploadProductWithImage method from the API service instead
+      await api.uploadProductWithImage(formData);
       
       router.push('/products');
     } catch (err: any) {
@@ -96,7 +93,7 @@ export default function CreateProductPage() {
                       name="name"
                       type="text"
                       placeholder="Enter product name"
-                      className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#1c219e]/50 placeholder-gray-400 ${
+                      className={`w-full text-gray-800 px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#1c219e]/50 placeholder-gray-400 ${
                         errors.name && touched.name ? 'border-red-500' : 'border-gray-300'
                       }`}
                     />
@@ -113,7 +110,7 @@ export default function CreateProductPage() {
                       name="description"
                       rows={4}
                       placeholder="Describe your product"
-                      className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#1c219e]/50 placeholder-gray-400 ${
+                      className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#1c219e]/50 text-gray-800 placeholder-gray-400 ${
                         errors.description && touched.description ? 'border-red-500' : 'border-gray-300'
                       }`}
                     />
@@ -130,7 +127,7 @@ export default function CreateProductPage() {
                       type="number"
                       step="0.01"
                       placeholder="0.00"
-                      className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#1c219e]/50 placeholder-gray-400 ${
+                      className={`w-full text-gray-800  px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#1c219e]/50 placeholder-gray-400 ${
                         errors.price && touched.price ? 'border-red-500' : 'border-gray-300'
                       }`}
                     />
