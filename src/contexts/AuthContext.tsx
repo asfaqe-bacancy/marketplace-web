@@ -37,6 +37,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const response = await authService.login(data);
       setUser(response.user);
       localStorage.setItem('auth_token', response.access_token);
+      
     } catch (error) {
       console.error('Login failed:', error);
       throw error;

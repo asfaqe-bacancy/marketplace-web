@@ -44,6 +44,7 @@ export const requestNotificationPermission = async () => {
         });
         
         console.log('FCM Token:', token);
+        localStorage.setItem('fcm_token', token);
 
 
         onMessage(messaging, (payload) => {

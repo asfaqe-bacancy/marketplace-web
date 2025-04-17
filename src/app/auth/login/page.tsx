@@ -23,7 +23,8 @@ export default function LoginPage() {
   const handleSubmit = async (values: { email: string; password: string }, { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }) => {
     try {
       setError('');
-      await login(values);
+      const fcm_token = localStorage.getItem('fcm_token');
+      await login({...values, deviceToken: fcm_token as any});
 
       // add token to local storage
       // console.log('-----> ', JSON.stringify(login));
