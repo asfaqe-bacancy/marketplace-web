@@ -235,7 +235,7 @@ export default function ProductsPage() {
                     </div>
                     <div className="p-4">
                       <h3 className="text-lg font-medium text-gray-900 mb-1">{product.name}</h3>
-                      <p className="text-[#1c219e] font-bold mb-2">${(product.price/100).toFixed(2)}</p>
+                      <p className="text-[#1c219e] font-bold mb-2">${(product.price).toFixed(2)}</p>
                       <p className="text-gray-500 text-sm mb-3 line-clamp-2">{product.description}</p>
                       <div className="flex justify-between items-center">
                         {/* <span className="text-xs text-gray-500">

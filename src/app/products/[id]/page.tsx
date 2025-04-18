@@ -183,19 +183,23 @@ export default function ProductDetailPage() {
               </div>
                
                 <div className="flex space-x-4">
-                  <Link href={`/products/${product?._id}/edit`} className="flex-1">
-                    <Button className="w-full bg-[#1c219e] hover:bg-[#141679]">
-                      Edit Product
-                    </Button>
-                  </Link>
-                  <Button 
-                    variant="outline" 
-                    className="flex-1 text-red-600 border-red-600 hover:bg-red-50"
-                    onClick={handleDelete}
-                    isLoading={deleteLoading}
-                  >
-                    Delete Product
-                  </Button>
+                  
+                    <>
+                      <Link href={`/products/${product._id}/edit`} className="flex-1">
+                        <Button className="w-full bg-[#1c219e] hover:bg-[#141679]">
+                          Edit Product
+                        </Button>
+                      </Link>
+                      <Button 
+                        variant="outline" 
+                        className="flex-1 text-red-600 border-red-600 hover:bg-red-50"
+                        onClick={handleDelete}
+                        isLoading={deleteLoading}
+                      >
+                        Delete Product
+                      </Button>
+                    </>
+                  
                 </div>
               
             </div>
