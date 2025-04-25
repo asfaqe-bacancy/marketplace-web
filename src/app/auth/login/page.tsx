@@ -80,7 +80,7 @@ export default function LoginPage() {
             <span className="text-5xl">*</span>
           </div>
           <h1 className="text-white text-5xl font-bold mt-16 mb-4">
-            Hello<br />Marketplace!👋
+            Hello<br />There!👋
           </h1>
           <p className="text-white/80 text-lg mt-6 max-w-md">
             Skip repetitive and manual sales-marketing tasks. Get highly productive through automation and save tons of time!
@@ -102,8 +102,7 @@ export default function LoginPage() {
             <div className="mb-8">
               <h1 className="text-2xl font-bold text-gray-800">Welcome Back!</h1>
               <p className="text-gray-600 mt-2">
-                Don't have an account? <Link href="/auth/register" className="text-[#1c219e] hover:underline">Create a new account now</Link>.
-                It's FREE! Takes less than a minute.
+                Don't have an account? <Link href="/auth/register" className="text-[#1c219e] hover:underline">Create now</Link>.
               </p>
             </div>
 
