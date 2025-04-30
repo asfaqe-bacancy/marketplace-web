@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect } from 'react';
-import { useRouter, usePathname } from 'next/navigation';
-import { useAuth } from '@/contexts/AuthContext';
+import { useEffect } from "react";
+import { useRouter, usePathname } from "next/navigation";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function AuthGuard({ children }: { children: React.ReactNode }) {
   const { isAuthenticated, isLoading } = useAuth();
@@ -11,9 +11,12 @@ export default function AuthGuard({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     // Skip redirect for login and register pages
-    if (!isLoading && !isAuthenticated && 
-        !pathname.includes('/auth/login') && 
-        !pathname.includes('/auth/register')) {
+    if (
+      !isLoading &&
+      !isAuthenticated &&
+      !pathname.includes("/auth/login") &&
+      !pathname.includes("/auth/register")
+    ) {
       router.push(`/auth/login?redirect=${encodeURIComponent(pathname)}`);
     }
   }, [isAuthenticated, isLoading, router, pathname]);
@@ -28,7 +31,7 @@ export default function AuthGuard({ children }: { children: React.ReactNode }) {
   }
 
   // If on auth pages or authenticated, show children
-  if (pathname.includes('/auth/') || isAuthenticated) {
+  if (pathname.includes("/auth/") || isAuthenticated) {
     return <>{children}</>;
   }
 

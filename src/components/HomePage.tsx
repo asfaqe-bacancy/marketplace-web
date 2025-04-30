@@ -1,14 +1,14 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { useAuth } from '@/contexts/AuthContext';
-import AppLayout from './AppLayout';
-import api from '@/lib/api';
-import Button from './ui/Button';
-import ProductCard from './ui/ProductCard';
-import LoadingSpinner from './ui/LoadingSpinner';
-import EmptyState from './ui/EmptyState';
+import React, { useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useAuth } from "@/contexts/AuthContext";
+import AppLayout from "./AppLayout";
+import api from "@/lib/api";
+import Button from "./ui/Button";
+import ProductCard from "./ui/ProductCard";
+import LoadingSpinner from "./ui/LoadingSpinner";
+import EmptyState from "./ui/EmptyState";
 
 interface Product {
   _id: string;
@@ -37,24 +37,26 @@ export default function HomePage() {
     total: 0,
     page: 1,
     limit: 10,
-    pages: 1
+    pages: 1,
   });
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
   const searchParams = useSearchParams();
-  
+
   // Get current page from URL or default to 1
-  const currentPage = Number(searchParams.get('page') || 1);
+  const currentPage = Number(searchParams.get("page") || 1);
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         setIsLoading(true);
-        const response = await api.get<ProductsResponse>(`/products?page=${currentPage}&limit=${meta.limit}`);
+        const response = await api.get<ProductsResponse>(
+          `/products?page=${currentPage}&limit=${meta.limit}`
+        );
         setProducts(response.data.data);
         setMeta(response.data.meta);
       } catch (error) {
-        console.error('Failed to fetch products:', error);
+        console.error("Failed to fetch products:", error);
       } finally {
         setIsLoading(false);
       }
@@ -77,10 +79,10 @@ export default function HomePage() {
 
     const pageButtons = [];
     const maxVisiblePages = 5;
-    
+
     let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
     let endPage = Math.min(meta.pages, startPage + maxVisiblePages - 1);
-    
+
     // Adjust start page if we're near the end
     if (endPage - startPage + 1 < maxVisiblePages) {
       startPage = Math.max(1, endPage - maxVisiblePages + 1);
@@ -111,11 +113,13 @@ export default function HomePage() {
           1
         </Button>
       );
-      
+
       // Ellipsis if there's a gap
       if (startPage > 2) {
         pageButtons.push(
-          <span key="ellipsis1" className="px-2">...</span>
+          <span key="ellipsis1" className="px-2">
+            ...
+          </span>
         );
       }
     }
@@ -139,10 +143,12 @@ export default function HomePage() {
       // Ellipsis if there's a gap
       if (endPage < meta.pages - 1) {
         pageButtons.push(
-          <span key="ellipsis2" className="px-2">...</span>
+          <span key="ellipsis2" className="px-2">
+            ...
+          </span>
         );
       }
-      
+
       pageButtons.push(
         <Button
           key={meta.pages}
@@ -181,23 +187,33 @@ export default function HomePage() {
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold text-gray-800">Products</h1>
           <Button
-            onClick={() => router.push('/products/create')}
+            onClick={() => router.push("/products/create")}
             className="bg-blue-600 text-white hover:bg-blue-700"
           >
             Add Product
           </Button>
         </div>
-        
+
         {isLoading ? (
           <LoadingSpinner size="lg" />
         ) : products.length === 0 ? (
-          <EmptyState 
-            message="No products available" 
+          <EmptyState
+            message="No products available"
             buttonText="Create Your First Product"
-            onButtonClick={() => router.push('/products/create')}
+            onButtonClick={() => router.push("/products/create")}
             icon={
-              <svg className="h-16 w-16 text-gray-400 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+              <svg
+                className="h-16 w-16 text-gray-400 mx-auto"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={1}
+                  d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
+                />
               </svg>
             }
           />
@@ -205,16 +221,16 @@ export default function HomePage() {
           <>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
               {products.map((product) => (
-                <ProductCard 
+                <ProductCard
                   key={product._id}
                   product={product}
                   onClick={() => handleProductClick(product._id)}
                 />
               ))}
             </div>
-            
+
             {renderPagination()}
-            
+
             <div className="mt-4 text-center text-sm text-gray-600 font-medium">
               Showing {products.length} of {meta.total} products
             </div>

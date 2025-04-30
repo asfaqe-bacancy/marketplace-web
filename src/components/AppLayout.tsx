@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useState } from 'react';
-import Link from 'next/link';
-import { useRouter, usePathname } from 'next/navigation';
-import { useAuth } from '@/contexts/AuthContext';
-import Footer from './Footer';
-import Navbar from './Navbar';
+import React, { useState } from "react";
+import Link from "next/link";
+import { useRouter, usePathname } from "next/navigation";
+import { useAuth } from "@/contexts/AuthContext";
+import Footer from "./Footer";
+import Navbar from "./Navbar";
 
 interface AppLayoutProps {
   children: React.ReactNode;

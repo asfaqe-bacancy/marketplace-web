@@ -32,8 +32,8 @@ export default function RootLayout({
       >
         <AuthProvider>
           <AuthGuard>
-          <FirebaseInitializer />
-          {children}
+            <FirebaseInitializer />
+            {children}
           </AuthGuard>
         </AuthProvider>
       </body>

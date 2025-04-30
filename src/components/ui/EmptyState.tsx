@@ -1,5 +1,5 @@
-import React, { ReactNode } from 'react';
-import Button from './Button';
+import React, { ReactNode } from "react";
+import Button from "./Button";
 
 interface EmptyStateProps {
   message: string;
@@ -8,18 +8,18 @@ interface EmptyStateProps {
   icon?: ReactNode;
 }
 
-export default function EmptyState({ 
-  message, 
-  buttonText, 
+export default function EmptyState({
+  message,
+  buttonText,
   onButtonClick,
-  icon 
+  icon,
 }: EmptyStateProps) {
   return (
     <div className="text-center py-20 bg-white rounded-lg shadow-sm">
       {icon && <div className="mb-4">{icon}</div>}
       <p className="text-gray-700 mb-4 font-medium">{message}</p>
       {buttonText && onButtonClick && (
-        <Button 
+        <Button
           onClick={onButtonClick}
           className="bg-blue-600 text-white hover:bg-blue-700"
         >

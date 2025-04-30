@@ -1,13 +1,13 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
-import AppLayout from '@/components/AppLayout';
-import Link from 'next/link';
-import Image from 'next/image';
-import Button from '@/components/ui/Button';
-import { useAuth } from '@/contexts/AuthContext';
-import api from '@/lib/api';
-import { useRouter, useSearchParams } from 'next/navigation';
+import React, { useState, useEffect } from "react";
+import AppLayout from "@/components/AppLayout";
+import Link from "next/link";
+import Image from "next/image";
+import Button from "@/components/ui/Button";
+import { useAuth } from "@/contexts/AuthContext";
+import api from "@/lib/api";
+import { useRouter, useSearchParams } from "next/navigation";
 
 interface Product {
   _id: string;
@@ -40,28 +40,30 @@ export default function ProductsPage() {
     total: 0,
     page: 1,
     limit: 10,
-    pages: 1
+    pages: 1,
   });
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const { isAuthenticated } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
-  
+
   // Get current page from URL or default to 1
-  const currentPage = Number(searchParams.get('page') || 1);
+  const currentPage = Number(searchParams.get("page") || 1);
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         setLoading(true);
-        const response = await api.get<ProductsResponse>(`/products?page=${currentPage}&limit=${meta.limit}`);
+        const response = await api.get<ProductsResponse>(
+          `/products?page=${currentPage}&limit=${meta.limit}`
+        );
         setProducts(response.data.data);
         setMeta(response.data.meta);
-        console.log('Products fetched:', response.data);
+        console.log("Products fetched:", response.data);
       } catch (err) {
-        console.error('Error fetching products:', err);
-        setError('Failed to load products. Please try again later.');
+        console.error("Error fetching products:", err);
+        setError("Failed to load products. Please try again later.");
       } finally {
         setLoading(false);
       }
@@ -80,10 +82,10 @@ export default function ProductsPage() {
 
     const pageButtons = [];
     const maxVisiblePages = 5;
-    
+
     let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
     let endPage = Math.min(meta.pages, startPage + maxVisiblePages - 1);
-    
+
     // Adjust start page if we're near the end
     if (endPage - startPage + 1 < maxVisiblePages) {
       startPage = Math.max(1, endPage - maxVisiblePages + 1);
@@ -112,11 +114,13 @@ export default function ProductsPage() {
           1
         </button>
       );
-      
+
       // Ellipsis if there's a gap
       if (startPage > 2) {
         pageButtons.push(
-          <span key="ellipsis1" className="px-2">...</span>
+          <span key="ellipsis1" className="px-2">
+            ...
+          </span>
         );
       }
     }
@@ -129,8 +133,8 @@ export default function ProductsPage() {
           onClick={() => handlePageChange(i)}
           className={`px-3 py-1 rounded mr-2 ${
             currentPage === i
-              ? 'bg-[#1c219e] text-white'
-              : 'border border-gray-300 text-black'
+              ? "bg-[#1c219e] text-white"
+              : "border border-gray-300 text-black"
           }`}
         >
           {i}
@@ -143,10 +147,12 @@ export default function ProductsPage() {
       // Ellipsis if there's a gap
       if (endPage < meta.pages - 1) {
         pageButtons.push(
-          <span key="ellipsis2" className="px-2">...</span>
+          <span key="ellipsis2" className="px-2">
+            ...
+          </span>
         );
       }
-      
+
       pageButtons.push(
         <button
           key={meta.pages}
@@ -170,11 +176,7 @@ export default function ProductsPage() {
       </button>
     );
 
-    return (
-      <div className="flex justify-center mt-8">
-        {pageButtons}
-      </div>
-    );
+    return <div className="flex justify-center mt-8">{pageButtons}</div>;
   };
 
   return (
@@ -203,8 +205,12 @@ export default function ProductsPage() {
           </div>
         ) : products.length === 0 ? (
           <div className="bg-white shadow rounded-lg p-8 text-center">
-            <h3 className="text-lg font-medium text-gray-900 mb-2">No products found</h3>
-            <p className="text-gray-500 mb-6">There are no products available at the moment.</p>
+            <h3 className="text-lg font-medium text-gray-900 mb-2">
+              No products found
+            </h3>
+            <p className="text-gray-500 mb-6">
+              There are no products available at the moment.
+            </p>
             {isAuthenticated && (
               <Link href="/products/create">
                 <Button className="bg-[#1c219e] hover:bg-[#141679]">
@@ -234,9 +240,15 @@ export default function ProductsPage() {
                       )}
                     </div>
                     <div className="p-4">
-                      <h3 className="text-lg font-medium text-gray-900 mb-1">{product.name}</h3>
-                      <p className="text-[#1c219e] font-bold mb-2">${(product.price).toFixed(2)}</p>
-                      <p className="text-gray-500 text-sm mb-3 line-clamp-2">{product.description}</p>
+                      <h3 className="text-lg font-medium text-gray-900 mb-1">
+                        {product.name}
+                      </h3>
+                      <p className="text-[#1c219e] font-bold mb-2">
+                        ${product.price.toFixed(2)}
+                      </p>
+                      <p className="text-gray-500 text-sm mb-3 line-clamp-2">
+                        {product.description}
+                      </p>
                       <div className="flex justify-between items-center">
                         {/* <span className="text-xs text-gray-500">
                           By {product.seller?.name}
@@ -250,10 +262,10 @@ export default function ProductsPage() {
                 </Link>
               ))}
             </div>
-            
+
             {/* Pagination */}
             {renderPagination()}
-            
+
             {/* Products count */}
             <div className="text-center text-gray-500 mt-4">
               Showing {products.length} of {meta.total} products

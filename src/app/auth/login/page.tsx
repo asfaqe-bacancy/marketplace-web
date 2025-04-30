@@ -1,27 +1,29 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
-import * as Yup from 'yup';
-import { useAuth } from '@/contexts/AuthContext';
-import Button from '@/components/ui/Button';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import Image from 'next/image';
-import { requestNotificationPermission } from '@/lib/firebase';
-import { useSearchParams } from 'next/navigation';
+import React, { useState, useEffect } from "react";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
+import { useAuth } from "@/contexts/AuthContext";
+import Button from "@/components/ui/Button";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import Image from "next/image";
+import { requestNotificationPermission } from "@/lib/firebase";
+import { useSearchParams } from "next/navigation";
 
 const LoginSchema = Yup.object().shape({
-  email: Yup.string().email('Invalid email').required('Email is required'),
-  password: Yup.string().min(6, 'Password must be at least 6 characters').required('Password is required'),
+  email: Yup.string().email("Invalid email").required("Email is required"),
+  password: Yup.string()
+    .min(6, "Password must be at least 6 characters")
+    .required("Password is required"),
 });
 
 export default function LoginPage() {
   const { login } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const redirectPath = searchParams.get('redirect') || '/';
-  const [error, setError] = useState('');
+  const redirectPath = searchParams.get("redirect") || "/";
+  const [error, setError] = useState("");
   const [deviceToken, setDeviceToken] = useState<string | null>(null);
 
   // Get device token on component mount
@@ -29,43 +31,49 @@ export default function LoginPage() {
     const getDeviceToken = async () => {
       try {
         await requestNotificationPermission();
-        const token = localStorage.getItem('fcm_token');
+        const token = localStorage.getItem("fcm_token");
         setDeviceToken(token);
       } catch (err) {
-        console.error('Failed to get device token:', err);
+        console.error("Failed to get device token:", err);
         // Fallback to a default token
-        setDeviceToken('web-app-token-' + Math.random().toString(36).substring(2, 15));
+        setDeviceToken(
+          "web-app-token-" + Math.random().toString(36).substring(2, 15)
+        );
       }
     };
 
     getDeviceToken();
   }, []);
 
-  const handleSubmit = async (values: { email: string; password: string }, { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }) => {
+  const handleSubmit = async (
+    values: { email: string; password: string },
+    { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }
+  ) => {
     try {
-      setError('');
-      console.log('Attempting login with:', values.email);
-      
+      setError("");
+      console.log("Attempting login with:", values.email);
+
       // Store device token in localStorage for later use in logout
       if (deviceToken) {
-        localStorage.setItem('device_token', deviceToken);
+        localStorage.setItem("device_token", deviceToken);
       }
-      
+
       await login({
         email: values.email,
         password: values.password,
-        deviceToken: deviceToken || 'web-app-token'
+        deviceToken: deviceToken || "web-app-token",
       });
-      
+
       // Add a small delay before redirecting
       setTimeout(() => {
-        console.log('Login successful, redirecting to:', redirectPath || '/');
-        router.push(redirectPath || '/');
+        console.log("Login successful, redirecting to:", redirectPath || "/");
+        router.push(redirectPath || "/");
       }, 100);
-      
     } catch (err: any) {
-      console.error('Login error:', err);
-      setError(err.response?.data?.message || 'Login failed. Please try again.');
+      console.error("Login error:", err);
+      setError(
+        err.response?.data?.message || "Login failed. Please try again."
+      );
     } finally {
       setSubmitting(false);
     }
@@ -80,10 +88,13 @@ export default function LoginPage() {
             <span className="text-5xl">*</span>
           </div>
           <h1 className="text-white text-5xl font-bold mt-16 mb-4">
-            Hello<br />There!👋
+            Hello
+            <br />
+            There!👋
           </h1>
           <p className="text-white/80 text-lg mt-6 max-w-md">
-            Skip repetitive and manual sales-marketing tasks. Get highly productive through automation and save tons of time!
+            Skip repetitive and manual sales-marketing tasks. Get highly
+            productive through automation and save tons of time!
           </p>
         </div>
         <div className="text-white/60 text-sm">
@@ -97,12 +108,21 @@ export default function LoginPage() {
           <div className="mb-10">
             <h2 className="text-2xl font-bold text-gray-800">Marketplace</h2>
           </div>
-          
+
           <div className="bg-white p-8 rounded-lg shadow-sm">
             <div className="mb-8">
-              <h1 className="text-2xl font-bold text-gray-800">Welcome Back!</h1>
+              <h1 className="text-2xl font-bold text-gray-800">
+                Welcome Back!
+              </h1>
               <p className="text-gray-600 mt-2">
-                Don't have an account? <Link href="/auth/register" className="text-[#1c219e] hover:underline">Create now</Link>.
+                Don't have an account?{" "}
+                <Link
+                  href="/auth/register"
+                  className="text-[#1c219e] hover:underline"
+                >
+                  Create now
+                </Link>
+                .
               </p>
             </div>
 
@@ -113,14 +133,17 @@ export default function LoginPage() {
             )}
 
             <Formik
-              initialValues={{ email: '', password: '' }}
+              initialValues={{ email: "", password: "" }}
               validationSchema={LoginSchema}
               onSubmit={handleSubmit}
             >
               {({ isSubmitting, errors, touched }) => (
                 <Form className="space-y-5">
                   <div className="space-y-1">
-                    <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                    <label
+                      htmlFor="email"
+                      className="block text-sm font-medium text-gray-700"
+                    >
                       Email
                     </label>
                     <Field
@@ -129,14 +152,23 @@ export default function LoginPage() {
                       type="email"
                       placeholder="your@email.com"
                       className={`w-full px-3 py-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#1c219e]/50 text-gray-700 placeholder-gray-400 ${
-                        errors.email && touched.email ? 'border-red-500' : 'border-gray-300'
+                        errors.email && touched.email
+                          ? "border-red-500"
+                          : "border-gray-300"
                       }`}
                     />
-                    <ErrorMessage name="email" component="p" className="mt-1 text-sm text-red-500" />
+                    <ErrorMessage
+                      name="email"
+                      component="p"
+                      className="mt-1 text-sm text-red-500"
+                    />
                   </div>
 
                   <div className="space-y-1">
-                    <label htmlFor="password" className="block text-sm font-medium text-gray-700 ">
+                    <label
+                      htmlFor="password"
+                      className="block text-sm font-medium text-gray-700 "
+                    >
                       Password
                     </label>
                     <Field
@@ -145,14 +177,23 @@ export default function LoginPage() {
                       type="password"
                       placeholder="••••••••"
                       className={`w-full px-3 py-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#1c219e]/50 text-gray-800 placeholder-gray-400 ${
-                        errors.password && touched.password ? 'border-red-500' : 'border-gray-300'
+                        errors.password && touched.password
+                          ? "border-red-500"
+                          : "border-gray-300"
                       }`}
                     />
-                    <ErrorMessage name="password" component="p" className="mt-1 text-sm text-red-500" />
+                    <ErrorMessage
+                      name="password"
+                      component="p"
+                      className="mt-1 text-sm text-red-500"
+                    />
                   </div>
 
                   <div className="flex justify-end">
-                    <Link href="/auth/forgot-password" className="text-sm text-[#1c219e] hover:underline">
+                    <Link
+                      href="/auth/forgot-password"
+                      className="text-sm text-[#1c219e] hover:underline"
+                    >
                       Forgot password?
                     </Link>
                   </div>

@@ -1,11 +1,11 @@
 "use client";
 
-import React from 'react';
-import { useAuth } from '@/contexts/AuthContext';
-import AppLayout from '@/components/AppLayout';
-import Button from '@/components/ui/Button';
-import ProtectedRoute from '@/components/ProtectedRoute';
-import { styles } from './styles';
+import React from "react";
+import { useAuth } from "@/contexts/AuthContext";
+import AppLayout from "@/components/AppLayout";
+import Button from "@/components/ui/Button";
+import ProtectedRoute from "@/components/ProtectedRoute";
+import { styles } from "./styles";
 
 export default function SettingsPage() {
   const { user, logout } = useAuth();
@@ -34,7 +34,6 @@ export default function SettingsPage() {
             <div className={styles.divider}>
               <h2 className={styles.sectionHeading}>Account Actions</h2>
               <div className={styles.actionContainer}>
-                
                 <Button
                   variant="outline"
                   className={styles.button.danger}

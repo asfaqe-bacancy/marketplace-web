@@ -1,20 +1,18 @@
-import axios from 'axios';
+import axios from "axios";
 
 const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3131',
+  baseURL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:3131",
 });
 
 // Initialize headers from localStorage on load
-if (typeof window !== 'undefined') {
-  const token = localStorage.getItem('auth_token');
-  
-  if (token) {
+if (typeof window !== "undefined") {
+  const token = localStorage.getItem("auth_token");
 
-    console.log('Token found in localStorage:', token);
-    api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-  }
-  else {
-    console.log('Token not found in localStorage');
+  if (token) {
+    console.log("Token found in localStorage:", token);
+    api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+  } else {
+    console.log("Token not found in localStorage");
   }
 }
 
@@ -22,8 +20,8 @@ if (typeof window !== 'undefined') {
 api.interceptors.request.use(
   (config) => {
     // For browser environments only
-    if (typeof window !== 'undefined') {
-      const token = localStorage.getItem('auth_token');
+    if (typeof window !== "undefined") {
+      const token = localStorage.getItem("auth_token");
       if (token && config.headers) {
         config.headers.Authorization = `Bearer ${token}`;
       }
@@ -44,11 +42,11 @@ const apiService = {
   // Form data methods
   async uploadProductWithImage(formData: FormData) {
     // Token is automatically added by the interceptor
-    console.log('Uploading product with image...');
-    const response = await api.post('/products/create-with-image', formData, {
+    console.log("Uploading product with image...");
+    const response = await api.post("/products/create-with-image", formData, {
       headers: {
-        'Content-Type': 'multipart/form-data',
-        'Authorization': `Bearer ${localStorage.getItem('auth_token')}`,
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
       },
     });
     return response.data;
@@ -56,11 +54,15 @@ const apiService = {
 
   async updateProductWithImage(productId: string, formData: FormData) {
     // Token is automatically added by the interceptor
-    const response = await api.patch(`/products/${productId}/with-image`, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    });
+    const response = await api.patch(
+      `/products/${productId}/with-image`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
     return response.data;
   },
 
@@ -68,7 +70,7 @@ const apiService = {
     // Token is automatically added by the interceptor
     const response = await api.delete(`/products/${productId}`);
     return response.data;
-  }
+  },
 };
 
 export default apiService;

@@ -1,9 +1,9 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useState } from 'react';
-import { authService } from '@/lib/auth';
-import type { LoginData, RegisterData } from '@/lib/auth';
-import apiService from '@/lib/api';
+import React, { createContext, useContext, useEffect, useState } from "react";
+import { authService } from "@/lib/auth";
+import type { LoginData, RegisterData } from "@/lib/auth";
+import apiService from "@/lib/api";
 
 interface AuthContextType {
   user: any | null;
@@ -37,9 +37,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       const response = await authService.login(data);
       setUser(response.user);
-      localStorage.setItem('auth_token', response.access_token);
+      localStorage.setItem("auth_token", response.access_token);
     } catch (error) {
-      console.error('Login failed:', error);
+      console.error("Login failed:", error);
       throw error;
     }
   };
@@ -49,7 +49,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const response = await authService.register(data);
       setUser(response.user);
     } catch (error) {
-      console.error('Registration failed:', error);
+      console.error("Registration failed:", error);
       throw error;
     }
   };
@@ -57,22 +57,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const logout = async () => {
     try {
       // Get device token from localStorage
-      const deviceToken = localStorage.getItem('device_token') || 'web-app-token';
-      
+      const deviceToken =
+        localStorage.getItem("device_token") || "web-app-token";
+
       // Call the logout API endpoint with the device token
-      await apiService.post('/auth/logout', { 
-        deviceToken 
+      await apiService.post("/auth/logout", {
+        deviceToken,
       });
-      
-      console.log('Logout API called successfully');
+
+      console.log("Logout API called successfully");
     } catch (error) {
-      console.error('Logout API call failed:', error);
+      console.error("Logout API call failed:", error);
       // Continue with local logout even if API call fails
     } finally {
       // Clear local storage and state
-      localStorage.removeItem('auth_token');
-      localStorage.removeItem('user');
-      localStorage.removeItem('device_token');
+      localStorage.removeItem("auth_token");
+      localStorage.removeItem("user");
+      localStorage.removeItem("device_token");
       setUser(null);
     }
   };
@@ -85,7 +86,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         isLoading,
         login,
         register,
-        logout
+        logout,
       }}
     >
       {children}
@@ -96,7 +97,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 export function useAuth() {
   const context = useContext(AuthContext);
   if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
 }
